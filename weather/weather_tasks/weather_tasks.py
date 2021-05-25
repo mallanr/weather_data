@@ -3,6 +3,8 @@ import re
 
 import luigi
 import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 
 from workflow.targets import DelegatingTarget
 
@@ -130,6 +132,10 @@ class WeatherTask(luigi.Task):
 
     def run(self):
         df = self.process_highest_temperature()
+		if df.size > 0:
+			#convert Dataframe to Apache Arrow Table
+			table = pa.Table.from_pandas(df)
+			pq.write_table(table,"C:\\weather\\input\\processed\\weather.overall.parquet.gzip",)
         self.output().write("Completed")
 
     def output(self):
