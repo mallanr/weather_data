@@ -135,7 +135,7 @@ class WeatherTask(luigi.Task):
 		if df.size > 0:
 			#convert Dataframe to Apache Arrow Table
 			table = pa.Table.from_pandas(df)
-			pq.write_table(table,"C:\\weather\\input\\processed\\weather.overall.parquet.gzip",)
+			pq.write_table(table,"C:\\weather\\input\\processed\\weather.overall.parquet.gzip", COMPRESSION = 'GZIP')
         self.output().write("Completed")
 
     def output(self):
